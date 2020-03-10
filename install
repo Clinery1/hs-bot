@@ -1,0 +1,4 @@
+# Install the deps needed by discord.io
+npm install https://github.com/woor/discord.io/tarball/gateway_v6
+# Install the local deps
+npm install

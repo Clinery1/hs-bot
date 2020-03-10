@@ -1,0 +1,7 @@
+/target
+**/*.old
+**/*.bak
+/auth.json
+/data
+/run
+/node_modules
