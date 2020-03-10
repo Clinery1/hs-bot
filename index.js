@@ -5,7 +5,6 @@ var Discord=require("discord.io");
 var auth=require("./auth.json");
 var fs=require("fs");
 var readline=require("readline");
-var sleep=require("sleep");
 // Data storage
 var messages={};
 try {
