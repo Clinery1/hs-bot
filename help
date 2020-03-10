@@ -1,0 +1,9 @@
+Help text:
+```
+!help           Show this message
+!allow          Whitelists this channel
+!deny           Explicitly blacklists this channel, by default channels are blacklisted
+!permission     Returns the permissions for this channel, set with `!allow` and `!deny`
+!t get TECH     Gets the tech TECH, defaults to all but undefined techs if TECH is blank
+!t set TECH=LVL Sets the tech TECH to the level LVL, has to be in the format TECH=LVL
+```
