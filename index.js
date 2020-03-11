@@ -22,8 +22,34 @@ var bot = new Discord.Client({
    autorun: true
 });
 bot.on("ready", function (evt) {
-    console.log("Bot ready\n\n");
+    console.log("Bot ready\n");
 });
+bot.setPresence({
+    idle_since:null,
+    game:{
+        name:"!help",
+        type:null,
+        url:null,
+    },
+});
+function testNumber(num,tech) {
+    let techs={
+        "redstar scanner":10,
+        "battleship":6,"transport":6,"miner":6,
+        "cargo bay":12,"shipment computer":12,"trade boost":12,"rush":12,"trade burst":12,"shipment drone":12,"offload":10,"shipment beam":12,"entrust":12,"dispatch":10,"recall":1,
+        "mining boost":12,"hydrogen bay extension":10,"enrich":12,"remote mining":10,"hydrogen upload":12,"mining unity":10,"crunch":12,"genesis":12,"hydrogen rocket":12,"mining drone":10,
+        "battery":12,"laser":12,"mass battery":12,"dual laser":12,"barrage":12,"dart launcher":12,
+        "alpha shield":5,"delta shield":12,"passive shield":12,"omega shield":12,"mirror shield":12,"blast shield":12,"area shield":12,
+        "emp":12,"teleport":12,"red star life extender":10,"remote repair":12,"timewarp":12,"unity":12,"sanctuary":1,"stealth":12,"fortify":12,"impulse":12,"alpha rocket":12,"salvage":12,"suppress":12,"destiny":12,"barrier":12,"vengeance":12,"delta rocket":12,"leap":10,"bond":12,"alpha drone":12,"suspend":12,"omega rocket":12
+    };
+    let techVal=techs[tech];
+    if (num>=0&&num<=techVal) {
+        return 0;
+    } else if (techVal!=undefined) {
+        return 1;
+    }
+    return 2;
+}
 bot.on("message", function (user, userID, channelID, message, evt) {
     // Messages that will start with `!` will be assumed to be commands
     if (message.substring(0, 1)=='!') {
@@ -82,6 +108,11 @@ bot.on("message", function (user, userID, channelID, message, evt) {
                 let support=["emp","teleport","red star life extender","remote repair","timewarp","unity","sanctuary","stealth","fortify","impulse","alpha rocket","salvage","suppress","destiny","barrier","vengeance","delta rocket","leap","bond","alpha drone","suspend","omega rocket"];
                 let techs=[misc,ships,trade,mining,weapons,shields,support];
                 let techNames=["misc","ships","trade","mining","weapons","shields","support"];
+                let miscAliases=[["red star scanner","rs scanner","rs"]];
+                let shipsAliases=[
+                    ["bs",],
+                    ["trans",],
+                ];
                 let tradeAliases=[
                     ["cargo bay extension","cargo extension"],
                 ];
@@ -89,9 +120,24 @@ bot.on("message", function (user, userID, channelID, message, evt) {
                     [],["hydro bay","hydrogen bay","hydrogen extension"],[],[],["upload"],[],[],["gen"],["hydro rocket"]
                 ];
                 let weaponAliases=[
-                    ["batt"]
+                    ["batt"],
+                    [],
+                    ["mb",],
+                    ["dl"],
+                    [],
+                    ["dart"],
                 ];
-                let aliases=[[],[],tradeAliases,miningAliases,[],[],[]];
+                let shieldAliases=[
+                    ["alpha"],
+                    ["delta"],
+                    ["passive"],
+                    ["omega"],
+                    ["mirror"],
+                    ["blast"],
+                    ["area"],
+                ];
+                let supportAliases=[];
+                let aliases=[miscAliases,shipsAliases,tradeAliases,miningAliases,weaponAliases,shieldAliases,supportAliases];
                 // variable;userID; 0 stands for tech, there will be no guildID of 0; techIndex is obtained from concatenating the string of the `techs` variable index and the index of the sub array.
                 // messages[userID][0]                                               [techIndex]
                 switch (subcommand) {
@@ -254,7 +300,28 @@ bot.on("message", function (user, userID, channelID, message, evt) {
                         if (val==-1) {
                             bot.sendMessage({
                                 to:channelID,
-                                message:"Failed to set tech `"+tech+"`",
+                                message:"Unknown tech `"+tech+"`",
+                            });
+                            break;
+                        }
+                        let trueName=techs[message[0]][message[1]];
+                        let res=testNumber(value,trueName);
+                        if(res==0){}else if (res==1) {
+                            bot.sendMessage({
+                                to:channelID,
+                                message:"Tech level `"+value+"` not in range.",
+                            });
+                            break;
+                        } else if (res==2) {
+                            bot.sendMessage({
+                                to:channelID,
+                                message:"Unknown tech. Please contact the developer to fix this issue.",
+                            });
+                            break;
+                        } else {
+                            bot.sendMessage({
+                                to:channelID,
+                                message:"Unknown error occured while setting tech. Please contact the developer to fix this issue.",
                             });
                             break;
                         }
