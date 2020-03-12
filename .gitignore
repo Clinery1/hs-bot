@@ -3,5 +3,6 @@
 **/*.bak
 /auth.json
 /data
+/permissions
 /run
 /node_modules
